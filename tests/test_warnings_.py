@@ -66,6 +66,15 @@ class TestWarningsLog:
         print(stream_value)
         assert stream_value.startswith('py.warnings: WARNING |')
 
+    def test_warnings_to_log_match_category_subclass_action_debug(self, logger: logging.Logger):
+        warnings_.set_warnings_handlers_from(logger)
+
+        with warnings_.warnings_to_log(Warning, action='debug'):
+            warnings.warn("This should be logged as DEBUG")
+        stream_value = logger.handlers[0].stream.getvalue()
+        print(stream_value)
+        assert stream_value.startswith('py.warnings: DEBUG |')
+
     def test_warnings_to_log_match_category_multiple_action_debug(self, logger: logging.Logger):
         warnings_.set_warnings_handlers_from(logger)
 
@@ -90,7 +99,7 @@ class TestWarningsLog:
         stream_value = logger.handlers[0].stream.getvalue()
         print(stream_value)
         assert stream_value.startswith('py.warnings: WARNING |')
-        
+
     def test_warnings_to_log_match_category_action_ignore(self, logger: logging.Logger):
         warnings_.set_warnings_handlers_from(logger)
 
