@@ -24,7 +24,6 @@ class warnings_to_log(ContextDecorator):
     :param action: default "debug".
         "debug" - change level of log record to DEBUG (from WARNING)
         "ignore" - filter out these warnings. (won't be passed on to any logger)
-        "log" - handled by loggers (as level WARNING)
     """
     def __init__(self, *categories, action="debug"):
         self.Filter = PyWarningsFilter(*categories, action=action)
@@ -42,13 +41,16 @@ class warnings_to_log(ContextDecorator):
 class PyWarningsFilter:
     def __init__(self, *categories, action="debug"):
         self.categories = categories
-        assert action in {"debug", "ignore", "log"}
+        assert action in {"debug", "ignore"}
         self.action = action
 
     def filter(self, record):
         for cat in self.categories:
-            if isinstance(cat, Warning):
-                cat = " {}: ".format(cat.__name__)
+            if not isinstance(cat, str):
+                if isinstance(cat, type) and issubclass(cat, Warning):
+                    cat = " {}: ".format(cat.__name__)
+                else:
+                    raise TypeError("Categories should be str or subclass of Warning")
             if cat in record.getMessage():
                 if self.action == "debug":
                     record.levelno = logging.DEBUG
@@ -56,6 +58,4 @@ class PyWarningsFilter:
                     return True
                 if self.action == "ignore":
                     return False
-                if self.action == "log":
-                    return True
         return True
