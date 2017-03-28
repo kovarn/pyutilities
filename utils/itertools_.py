@@ -75,6 +75,10 @@ def flatten(listOfLists):
     return chain.from_iterable(listOfLists)
 
 
+def flatmap(func, *iterables):
+    return flatten(map(func, *iterables))
+
+
 def repeatfunc(func, times=None, *args):
     """Repeat calls to func with specified arguments.
 
@@ -231,4 +235,3 @@ def random_combination_with_replacement(iterable, r):
     n = len(pool)
     indices = sorted(random.randrange(n) for _ in range(r))
     return tuple(pool[i] for i in indices)
-
