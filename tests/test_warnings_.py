@@ -7,6 +7,7 @@ import pytest as pytest
 from utils import warnings_
 
 
+# noinspection PyShadowingNames
 @pytest.fixture
 def logger():
     logger = logging.getLogger(__name__)
@@ -22,6 +23,7 @@ def logger():
     logger.removeHandler(ch)
 
 
+# noinspection PyShadowingNames
 @pytest.mark.usefixtures('logger')
 class TestWarningsLog:
     def test_set_warnings_handlers_from(self, logger: logging.Logger):

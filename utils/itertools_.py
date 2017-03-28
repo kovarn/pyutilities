@@ -69,6 +69,7 @@ def dotproduct(vec1, vec2):
     return sum(map(operator.mul, vec1, vec2))
 
 
+# noinspection PyPep8Naming
 def flatten(listOfLists):
     """Flatten one level of nesting"""
     return chain.from_iterable(listOfLists)
@@ -105,8 +106,8 @@ def roundrobin(*iterables):
     nexts = cycle(iter(it).__next__ for it in iterables)
     while pending:
         try:
-            for next in nexts:
-                yield next()
+            for next_ in nexts:
+                yield next_()
         except StopIteration:
             pending -= 1
             nexts = cycle(islice(nexts, pending))
@@ -202,6 +203,7 @@ def first_false(iterable, default=True, pred=None):
     return next(filterfalse(pred, iterable), default)
 
 
+# noinspection PyShadowingNames
 def random_product(*args, repeat=1):
     """Random selection from itertools.product(*args, **kwds)"""
     pools = [tuple(pool) for pool in args] * repeat
@@ -227,6 +229,6 @@ def random_combination_with_replacement(iterable, r):
     """Random selection from itertools.combinations_with_replacement(iterable, r)"""
     pool = tuple(iterable)
     n = len(pool)
-    indices = sorted(random.randrange(n) for i in range(r))
+    indices = sorted(random.randrange(n) for _ in range(r))
     return tuple(pool[i] for i in indices)
 

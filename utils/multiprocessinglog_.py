@@ -30,6 +30,7 @@ class MultiProcessingLog(logging.Handler):
 
     def receive(self):
         while True:
+            # noinspection PyBroadException
             try:
                 record = self.queue.get()
                 self._handler.emit(record)
@@ -58,6 +59,7 @@ class MultiProcessingLog(logging.Handler):
         return record
 
     def emit(self, record):
+        # noinspection PyBroadException
         try:
             s = self._format_record(record)
             self.send(s)
